@@ -44,8 +44,13 @@ $(function() {
 	}
 	
 	function addTarefa(text) {
+		id = id || 0;
+		
 		var $tarefa = $("<div />")
 						.addClass("tarefa-item")
+						.append($("<div />")
+								.addClass("tarefa-id")
+								.text(id))
 						.append($("<div />")
 								.addClass("tarefa-texto")
 								.text(text))
