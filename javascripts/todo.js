@@ -1,5 +1,5 @@
 $(function() {
-	var meuLogin = "user@teste";
+	var meuLogin = "seu@email.com";
 	var server = "http://livro-capitulo07.herokuapp.com";
 	
 	var $lastClicked;
@@ -19,9 +19,11 @@ $(function() {
 			$lastClicked = $(this);
 				
 			var text = $lastClicked.children(".tarefa-texto").text();
+			// guardamos o id da tarefa na edição
+			var id = $lastClicked.children(".tarefa-id").text();
 			
-			var html = "<input type='text' " +
-						"class='tarefa-edit' value='" + text + "'>";
+			var html = "<div class='tarefa-id'>" + id + "</div>" +
+						"<input type='text' " + "class='tarefa-edit' value='" + text + "'>";
 						
 			$(this).html(html);
 			
@@ -43,7 +45,7 @@ $(function() {
 		}
 	}
 	
-	function addTarefa(text) {
+	function addTarefa(text, id) {
 		id = id || 0;
 		
 		var $tarefa = $("<div />")
@@ -58,7 +60,7 @@ $(function() {
 								.addClass("tarefa-delete"))
 						.append($("<div />")
 								.addClass("clear"));
-		
+								
 		$("#tarefa-list").append($tarefa);
 		
 		$(".tarefa-delete").click(onTarefaDeleteClick);
@@ -68,13 +70,16 @@ $(function() {
 	
 	function savePendingEdition($tarefa) {
 		var text = $tarefa.children(".tarefa-edit").val();
+		var id = $tarefa.children(".tarefa-id").text();
 		
 		$tarefa.empty();
 		
-		$tarefa.append("<div class='tarefa-texto'>" + text + "</div>")
+		$tarefa.append("<div class='tarefa-id'>" + id + "</div>")
+				.append("<div class='tarefa-texto'>" + text + "</div>")
 				.append("<div class='tarefa-delete'></div>")
 				.append("<div class='clear'></div>");
 
+		updateTarefa(text, id);
 
 		$(".tarefa-delete").click(onTarefaDeleteClick);
 
@@ -84,7 +89,7 @@ $(function() {
 	function loadTarefas() {
 		$("#tarefa").empty();
 		
-		$.getJSON(server + "/tarefas", {usuario : meuLogin})
+		$.getJSON(server + "/tarefas", {usuario: meuLogin})
 				.done(function(data) {
 					console.log("data: ", data);
 					
@@ -92,6 +97,10 @@ $(function() {
 						addTarefa(data[tarefa].texto, data[tarefa].id);
 					}
 				});
+	}
+	
+	function updateTarefa(texto, id) {
+			$.post(server + "/tarefa", {tarefa_id: id, texto: texto})
 	}
 	
 	$("#tarefa").keydown(onTarefaKeyDown);
