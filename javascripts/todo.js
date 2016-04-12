@@ -1,4 +1,7 @@
 $(function() {
+	var meuLogin = "user@teste";
+	var server = "http://livro-capitulo07.herokuapp.com";
+	
 	var $lastClicked;
 	
 	function onTarefaDeleteClick() {
@@ -73,10 +76,19 @@ $(function() {
 		$tarefa.click(onTarefaItemClick);
 	}
 	
+	function loadTarefas() {
+		$.getJSON(server + "/tarefas", {usuario : meuLogin})
+				.done(function(data) {
+					console.log(data);
+				});
+	}
+	
 	$("#tarefa").keydown(onTarefaKeyDown);
 	
 	$(".tarefa-delete").click(onTarefaDeleteClick);
 	
 	$(".tarefa-item").click(onTarefaItemClick);
+	
+	loadTarefas();
 }
 );
