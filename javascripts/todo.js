@@ -82,9 +82,15 @@ $(function() {
 	}
 	
 	function loadTarefas() {
+		$("#tarefa").empty();
+		
 		$.getJSON(server + "/tarefas", {usuario : meuLogin})
 				.done(function(data) {
-					console.log(data);
+					console.log("data: ", data);
+					
+					for(var tarefa = 0; tarefa < data.length; tarefa++) {
+						addTarefa(data[tarefa].texto, data[tarefa].id);
+					}
 				});
 	}
 	
