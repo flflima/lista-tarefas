@@ -1,9 +1,3 @@
-/*
-	Paleta de cores:
-	#ffffff
-	#cc0000
-	#333333
-*/
 html {
 	font: 100%;
 	font-family: helvetica, colibri, tahoma, sans-serif;
@@ -80,6 +74,6 @@ div.todo h2 {
 	visibility: visible;
 }
 
-.tarefa-item, .tarefa-texto, .tarefa-delete {
-	/* border: 1px solid black; */
+.tarefa-id {
+	visibility: hidden;
 }
