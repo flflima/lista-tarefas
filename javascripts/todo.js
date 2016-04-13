@@ -1,11 +1,16 @@
 $(function() {
-	var meuLogin = "seu@email.com";
+	var meuLogin = "teste@email.com";
 	var server = "http://livro-capitulo07.herokuapp.com";
 	
 	var $lastClicked;
 	
 	function onTarefaDeleteClick() {
 		$(this).parent(".tarefa-item").off("click").hide("slow", function() {
+			$.post(server + "/tarefa",
+							{usuario: meuLogin,
+							 _method: "DELETE",
+							 tarefa_id: $(this).children(".tarefa-id").text() });
+			
 			$(this).remove();
 		});
 	}
@@ -66,6 +71,12 @@ $(function() {
 		$(".tarefa-delete").click(onTarefaDeleteClick);
 		
 		$(".tarefa-item").click(onTarefaItemClick);
+		
+		if(id === 0) {
+			var div = $tarefa.children(".tarefa-id");
+			console.log("id", div);
+			newTarefa(text, $(div));
+		}
 	}
 	
 	function savePendingEdition($tarefa) {
@@ -101,6 +112,17 @@ $(function() {
 	
 	function updateTarefa(texto, id) {
 			$.post(server + "/tarefa", {tarefa_id: id, texto: texto})
+	}
+	
+	function newTarefa(text, $div) {
+		$.post(server + "/tarefa", 
+						{usuario: meuLogin, 
+						 texto: text, 
+						 _method: "PUT"})
+			.done(function(data) {
+				console.log($div);
+				$div.text(data.id);
+		});
 	}
 	
 	$("#tarefa").keydown(onTarefaKeyDown);
